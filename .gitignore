@@ -1,0 +1,70 @@
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling / env managers
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.pyre/
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# OS files
+*.log
+
+# dotenv / secrets
+.env
+.env.*
+!.env.example
+
+# Alembic / database local copies
+*.sqlite3
+*.db
+*.db-journal
+
+# FastAPI / app generated files
+# keep out local uploads or generated media if you add them later
+uploads/
+media/
+
+# uv / local package manager cache (optional)
+.uv_cache/
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Local test output
+.tmp/
+tmp/
+
+# Coverage and reports
+coverage.xml
+
+# If you use Windows-generated files
+$RECYCLE.BIN/
+Desktop.ini
