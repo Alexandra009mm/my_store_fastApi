@@ -1,6 +1,9 @@
+import os
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, HTTPException, Query
+import cloudinary.uploader
+from cloudinary.exceptions import Error as CloudinaryError
+from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile
 from sqlmodel import Session, select 
 
 # Importamos solo lo necesario de Pydantic sin chocar con SQLModel
@@ -10,6 +13,31 @@ from src.models.product_model import Poduct, ProductCreate
 from src.shared.session_db import get_session, SessionDep
 
 app = FastAPI()
+
+
+@app.post('/images')
+def upload_image(image: UploadFile = File(...)):
+    if not image.content_type or not image.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail='El archivo debe ser una imagen')
+
+    if not os.getenv('CLOUDINARY_URL'):
+        raise HTTPException(
+            status_code=503,
+            detail='Cloudinary no está configurado. Define la variable CLOUDINARY_URL.',
+        )
+
+    try:
+        uploaded_image = cloudinary.uploader.upload(image.file, resource_type='image')
+    except CloudinaryError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail='No se pudo subir la imagen a Cloudinary',
+        ) from exc
+
+    return {
+        'url': uploaded_image['secure_url'],
+        'public_id': uploaded_image['public_id'],
+    }
 
 # Aquí va a ejecutarse el código cuando se inicie la aplicación
 @app.on_event("startup")
